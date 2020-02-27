@@ -1,0 +1,24 @@
+version: '3'
+services:
+ jenkins-slave-2:
+   build:
+      context: ./
+   container_name: jenkins-slave-cn-2
+   hostname: jenkins-slave-cn-2
+   restart: unless-stopped
+   environment:
+     JENKINS_URL: 'http://jenkins.xxx.xxx:8088/'
+     #JENKINS_TUNNEL: 0.0.0.0:8080           # proxy HOST:PORT
+     JENKINS_SECRET: 'xxxx'
+     JENKINS_AGENT_NAME: 'ali-sh-2'      # jenkins mastet setting
+     JENKINS_AGENT_WORKDIR: '/home/jenkins/agent'
+   #mkdir -p ./data/agent ./data/data  && chmod 777 ./data/agent && umask 0002
+   volumes:                                                  
+     - ./data/agent:/home/jenkins/agent
+     - ./data/data:/data
+     - /var/run/docker.sock:/var/run/docker.sock
+   logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
